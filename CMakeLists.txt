@@ -48,6 +48,7 @@ set(Qt${QT_VERSION_MAJOR}_DIR "${QT_DIR}")
 find_package(Qt${QT_VERSION_MAJOR} ${QT_VERSION} REQUIRED COMPONENTS ${QT_MODULES})
 
 include(QtCSGBackports)
+include(QtCSGCheckFloatSupport)
 
 add_subdirectory(qtcsg)
 add_subdirectory(qt3dcsg)

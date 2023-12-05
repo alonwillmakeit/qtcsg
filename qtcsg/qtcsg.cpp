@@ -65,8 +65,19 @@ Vertex Vertex::interpolated(Vertex other, float t) const
 
 Plane Plane::fromPoints(QVector3D a, QVector3D b, QVector3D c)
 {
+#ifdef QTCSG_USE_QVECTOR3D_NORMALIZED
     const auto n = normalVector(a, b, c);
-    return Plane{n, dotProduct(n, a)};
+#else
+    auto n = crossProduct(b - a, c - a);
+    const auto x = n.x(), y = n.y(), z = n.z();
+    const auto l = std::sqrt(x * x + y * y + z * z);
+
+    if (!qFuzzyIsNull(l - 1.0f) && !qFuzzyIsNull(l))
+        n /= l;
+#endif
+
+    const auto w = dotProduct(n, a);
+    return Plane{std::move(n), w};
 }
 
 void Plane::flip()
